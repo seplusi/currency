@@ -1,9 +1,22 @@
 from selenium.common.exceptions import NoSuchElementException
+import time
 
 
-class MainPage:
+class InsertValuesPage:
     def __init__(self, driver):
         self.driver = driver.instance
+
+        self.verify_cookies_and_accept()
+        self.verify_heading()
+
+    def verify_heading(self):
+        for _ in range(10):
+            if self.driver.find_element_by_css_selector('div > h1[id="main-heading"]').text == 'XE Currency Converter':
+                break
+            time.sleep(0.1)
+        else:
+            print('Main page heading was not loaded')
+            assert False
 
     def verify_cookies_and_accept(self):
         try:
@@ -24,19 +37,5 @@ class MainPage:
         self.driver.find_element_by_xpath("//*[@id=\"from\"]").send_keys("%s\n" % from_currency_name)
         self.driver.find_element_by_xpath("//*[@id=\"to\"]").send_keys("%s\n" % to_currency_name)
 
-    def perform_convertion_and_validate(self, from_currency_name, amount):
+    def perform_convertion(self):
         self.driver.find_element_by_css_selector('button[class^="Button-sc-1ikk70s-0 submitButton"]').click()
-
-        result = float(self.driver.find_element_by_css_selector('span[class="converterresult-toAmount"]').text)
-
-        for element in self.driver.find_elements_by_css_selector('div[class="sc-EHOje lkcPkj"]'):
-            if "1 %s =" % from_currency_name in element.text:
-                conv_rate = float(element.text.split(' ')[-2])
-                assert result == conv_rate * amount, 'result=%s conv_rate=%s amount=%s' % (str(result), str(conv_rate), amount)
-                break
-        else:
-            print('element with conversion rate was not found')
-            assert False
-
-
-

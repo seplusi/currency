@@ -1,10 +1,13 @@
 import unittest
+from ddt import ddt, data
 from src.main.common.chromedriver_obj import Driver
-from src.main.page_objects.main_page import MainPage
-
+from src.main.page_objects.insert_values_page import InsertValuesPage
+from src.main.page_objects.results_page import ResultsPage
 
 chromedriver_path = '/home/luis/Programs/chromedriver/chromedriver'
 
+
+@ddt
 class TestCurrencyConverter(unittest.TestCase):
     """A sample test class to show how page object works"""
 
@@ -14,14 +17,14 @@ class TestCurrencyConverter(unittest.TestCase):
 
     def setUp(self):
         self.driver.navigate("https://www.xe.com/currencyconverter/")
-        self.main_page = MainPage(self.driver)
-        self.main_page.verify_cookies_and_accept()
+        self.insert_data_page = InsertValuesPage(self.driver)
 
-    def test_convert_euro_2_pounds(self):
-        self.main_page.insert_amount(10)
-        self.main_page.select_currencies('EUR', 'GBP')
-        self.main_page.perform_convertion_and_validate('EUR', 10)
-        pass
+    @data(2, 17, 33, 1000, 10000, 12, 44, 111, 12, 111111, 321, 1, 2, 3, 4, 5)
+    def test_convert_euro_2_pounds(self, amount):
+        self.insert_data_page.insert_amount(amount)
+        self.insert_data_page.select_currencies('EUR', 'GBP')
+        self.insert_data_page.perform_convertion()
+        ResultsPage(self.driver).perform_validate('EUR', amount)
 
     def tearDown(self):
         pass
