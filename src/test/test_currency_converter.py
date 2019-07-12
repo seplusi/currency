@@ -19,12 +19,27 @@ class TestCurrencyConverter(unittest.TestCase):
         self.driver.navigate("https://www.xe.com/currencyconverter/")
         self.insert_data_page = InsertValuesPage(self.driver)
 
-    @data(2, 17, 33, 1000, 10000, 12, 44, 111, 12, 111111, 321, 1, 2, 3, 4, 5)
+    @data(11111, 1, 2, 333, 234, 543, 9, 12345, 2345, 9876)
     def test_convert_euro_2_pounds(self, amount):
         self.insert_data_page.insert_amount(amount)
         self.insert_data_page.select_currencies('EUR', 'GBP')
         self.insert_data_page.perform_convertion()
         ResultsPage(self.driver).perform_validate('EUR', amount)
+
+    def test_convert_euro_cents_2_pounds(self):
+        amount = 0.1
+        self.insert_data_page.insert_amount(amount)
+        self.insert_data_page.select_currencies('EUR', 'GBP')
+        self.insert_data_page.perform_convertion()
+        ResultsPage(self.driver).perform_validate('EUR', amount)
+
+    def test_convert_euro_cents_2_pounds(self):
+        amount = 0.2
+        self.insert_data_page.insert_amount(amount)
+        self.insert_data_page.select_currencies('EUR', 'GBP')
+        self.insert_data_page.perform_convertion()
+        ResultsPage(self.driver).perform_validate('EUR', amount)
+
 
     def tearDown(self):
         pass

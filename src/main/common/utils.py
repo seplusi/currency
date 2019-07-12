@@ -20,4 +20,4 @@ def convert_string_float_into_integer(number_str):
     decimals = remain.split('.')[1]
     multiplier = pow(10, len(decimals))
 
-    return thousands * multiplier * 1000 + units * multiplier + int(decimals)
+    return thousands * multiplier * 1000 + units * multiplier + int(decimals), multiplier

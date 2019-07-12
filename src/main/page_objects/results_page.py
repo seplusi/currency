@@ -6,10 +6,10 @@ class ResultsPage:
     """
     def __init__(self, driver):
         self.driver = driver.instance
-        result_str = self.driver.find_element_by_css_selector('span[class="converterresult-toAmount"]').text
+        self.result_str = self.driver.find_element_by_css_selector('span[class="converterresult-toAmount"]').text
 
         # Get rid of floats as they can have a precision problem. Work with integers instead
-        self.result = utils.convert_string_float_into_integer(result_str)
+        self.result, self.multiplier = utils.convert_string_float_into_integer(self.result_str)
 
     def perform_validate(self, from_currency_name, amount):
         """
@@ -28,11 +28,17 @@ class ResultsPage:
                 conv_rate = element.text.split(' ')[-2]
                 conv_rate_units = int(conv_rate.split('.')[-1])
                 total = conv_rate_units * amount
-                while total > 1000000:
-                    total = round(total/10)
+                if total > 1000000:
+                    while total > 1000000:
+                        total = total/10
+                elif total < 99999:
+                    while total < conv_rate_units:
+                        total = total*10
+
+                total = round(total)
 
                 # Make sure conversion is OK
-                assert self.result == total, 'result=%d conv_rate=%d amount=%d total=%d' % (self.result, conv_rate_units, amount, total)
+                assert self.result in [total, total + 1, total - 1], 'result_from_webpage=%s\n result_without_decimals=%d\n conv_rate_without_decimals=%d\n amount=%d\n total_without_decimals=%d' % (self.result_str, self.result, conv_rate_units, amount, total)
                 break
         else:
             print('element with conversion rate was not found')

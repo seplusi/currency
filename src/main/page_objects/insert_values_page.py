@@ -50,7 +50,7 @@ class InsertValuesPage:
         :return: None
         """
         element = self.driver.find_element_by_css_selector('input[class^="Input-lwa9ow-0"]')
-        element.send_keys(amount)
+        element.send_keys(str(amount))
 
     def select_currencies(self, from_currency_name, to_currency_name):
         """
