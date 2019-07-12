@@ -25,10 +25,4 @@ Go to test scritp folder and run it
     cd src/test
     python3.5 ./master_test_survey.py
 
-    © 2019 GitHub, Inc.
-    Terms
-    Privacy
-    Security
-    Status
-    Help
-
+Expected output
