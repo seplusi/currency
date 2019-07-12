@@ -2,7 +2,9 @@ from selenium import webdriver
 
 
 class Driver:
-
+    """
+        Class that models a webdriver
+    """
     def __init__(self, chromedriver_path):
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
