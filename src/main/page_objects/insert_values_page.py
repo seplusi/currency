@@ -22,7 +22,7 @@ class InsertValuesPage:
         :return: None
         """
         for _ in range(10):
-            if self.driver.find_element_by_css_selector('div > h1[id="main-heading"]').text == 'XE Currency Converter':
+            if self.driver.find_element_by_css_selector("div[class='RowContainer-jiJByP eOAMnX'] > div > h2").text == 'XE Currency Converter':
                 break
             time.sleep(0.1)
         else:
@@ -35,13 +35,10 @@ class InsertValuesPage:
         :return: None
         """
         try:
-            self.driver.implicitly_wait(5)
             verify_cookie = self.driver.find_element_by_css_selector('div[class="privacy-basic-body"]')
             verify_cookie.find_element_by_css_selector('div[class="privacy-button-container"] > button').click()
         except NoSuchElementException:
             print('No cookie. No need to accept')
-        finally:
-            self.driver.implicitly_wait(5)
 
     def insert_amount(self, amount):
         """
@@ -49,7 +46,7 @@ class InsertValuesPage:
         :param amount: Integer with amount to convert
         :return: None
         """
-        element = self.driver.find_element_by_css_selector('input[class^="Input-lwa9ow-0"]')
+        element = self.driver.find_element_by_id('amount')
         element.send_keys(str(amount))
 
     def select_currencies(self, from_currency_name, to_currency_name):
@@ -67,4 +64,4 @@ class InsertValuesPage:
             Clicks in the convert icon
         :return: None
         """
-        self.driver.find_element_by_css_selector('button[class^="Button-sc-1ikk70s-0 submitButton"]').click()
+        self.driver.find_element_by_css_selector('button[class="OldButton-jvvAjr SubmitButton-fCPQGw epSzca submitButton"]').click()

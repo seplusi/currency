@@ -14,9 +14,10 @@ class TestCurrencyConverter(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.driver = Driver(chromedriver_path)
+        cls.driver.instance.implicitly_wait(5)
 
     def setUp(self):
-        self.driver.navigate("https://www.xe.com/currencyconverter/")
+        self.driver.navigate("https://www.xe.com/")
         self.insert_data_page = InsertValuesPage(self.driver)
 
     @data(11111, 1, 2, 333, 234, 543, 9, 10345, 2345, 9876)
@@ -39,7 +40,6 @@ class TestCurrencyConverter(unittest.TestCase):
         self.insert_data_page.select_currencies('EUR', 'GBP')
         self.insert_data_page.perform_convertion()
         ResultsPage(self.driver).perform_validate('EUR', amount)
-
 
     def tearDown(self):
         pass
